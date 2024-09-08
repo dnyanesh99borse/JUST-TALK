@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Background</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* Global Styles */
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Nerko+One&display=swap');
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      color: #f5f5f5;
+      background-color: #282828;
+      overflow: hidden;
+    }
+
+    /* Video Background Container */
+    .video-container {
+      position: absolute;
+      height: 100vh;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    #bg-video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      filter: brightness(60%) blur(3px);
+    }
+
+    /* Content Over Video */
+    .content {
+      position: absolute;
+      top: 10%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 1;
+    }
+
+    h1 {
+      font-family: "Montserrat", sans-serif;
+      font-optical-sizing: auto;
+      font-size: 3.7rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: #50f35b;
+      text-shadow: 3px 5px 2px rgba(200, 255, 0, 0.5);
+    }
+
+    p {
+      font-family: "Nerko One", cursive;
+      font-size: 1.5rem;
+      color: #369034;
+      font-weight: 500;
+      text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Chat Container */
+    .chat-container {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 550px;
+      background-color: rgba(0, 0, 0, 0.7);
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .messages {
+      max-height: 300px;
+      padding: 20px;
+      overflow-y: auto;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .message {
+      background-color: #66bb6a;
+      padding: 10px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+      max-width: 80%;
+      word-wrap: break-word;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .input-area {
+      display: flex;
+      padding: 10px;
+      background-color: #ffffff;
+    }
+
+    textarea {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      resize: none;
+      outline: none;
+      background-color: #616161;
+      color: rgb(255, 255, 255);
+      font-size: 1rem;
+    }
+
+    textarea::placeholder {
+      color: #f1eded;
+      /* Set the placeholder text color */
+      font-size: 1rem;
+      /* Adjust the font size */
+      font-style: italic;
+      /* Make it italic */
+      opacity: 1;
+      /* Ensure full visibility */
+    }
+
+    button {
+      background-color: #00c853;
+      border: none;
+      color: white;
+      padding: 12px 20px;
+      margin-left: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #00e676;
+    }
+
+
+
+
+
+/* Existing styles for larger screens (unchanged) */
+.image-upload-box {
+  transform: translate(4rem, 12rem);
+  height: 25rem;
+  width: 33rem;
+  background: #fff;
+  position: relative;
+  border-radius: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.image-upload-box:hover {
+  box-shadow: 0 25px 40px rgba(0, 0, 0, 0.3);
+}
+
+.image-upload-box::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  width: calc(100% + 15px);
+  height: calc(100% + 15px);
+  border-radius: 30px;
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.8), transparent);
+  border: 5px solid rgba(76, 175, 80, 0.6);
+  z-index: -1;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.image-upload-box:hover::before {
+  transform: rotate(5deg);
+  opacity: 1;
+}
+
+.image-upload-box::after {
+  content: '';
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  bottom: 15px;
+  border: 2px dashed rgba(76, 175, 80, 0.6);
+  border-radius: 15px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.image img {
+  height: 23rem;
+  width: 30rem;
+  border-radius: 1rem;
+  border: 1px solid black;
+}
+
+.box {
+  transform: translate(-27.8rem, 11rem);
+  text-align: center;
+}
+
+.box h2 {
+  font-size: 2.5rem;
+  color: #c2d994;
+  text-shadow: 1px 1px 6px #00e676;
+}
+
+/* Media query for smaller screens (mobile responsiveness) */
+@media (max-width: 768px) {
+  /* Center the image-upload-box */
+  .image-upload-box {
+    transform: translate(0, 8rem);
+    height: auto;
+    width: 100%; /* Make it responsive to screen size */
+    margin: 2rem auto;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .image-upload-box img {
+    height: auto;
+    width: 90%; /* Make the image responsive */
+  }
+
+  /* Center the box containing h2 and p */
+  .box {
+    transform: translate(0, 0);
+    margin: 1rem auto;
+    width: 90%; /* Adjust width for mobile */
+  }
+
+  .box h2 {
+    font-size: 2rem; /* Reduce font size for mobile */
+  }
+
+  .box p {
+    font-size: 1.2rem; /* Adjust p font size */
+  }
+}
+
+@media (max-width: 480px) {
+  /* Further adjustments for smaller devices */
+  .image-upload-box {
+    width: 80%;
+    height: auto;
+    transform: translate(-.5rem,12rem);
+    
+  }
+
+  .box {
+    transform: translate(0,12.9rem);
+    margin: 1rem auto;
+    width: 90%; /* Adjust width for mobile */
+  }
+
+  .image-upload-box img {
+    height: auto;
+    width: 100%; /* Make the image responsive */
+  }
+
+  
+.image-upload-box:hover {
+  box-shadow: 0 25px 20px rgba(0, 0, 0, 0.3);
+}
+
+.image-upload-box:hover::before {
+  transform: rotate(5deg);
+  opacity: 1;
+}
+
+h1 {
+      font-family: "Montserrat", sans-serif;
+      font-optical-sizing: auto;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #50f35b;
+      text-shadow: 3px 5px 2px rgba(200, 255, 0, 0.5);
+    }
+
+    p {
+      font-family: "Nerko One", cursive;
+      font-size: 1.2rem;
+      color: #369034;
+      font-weight: 500;
+      text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+    }
+
+  .box h2 {
+    font-size: 1.8rem;
+  }
+
+  .box p {
+    font-size: 1rem;
+  }
+
+  .chat-container {
+      position: fixed;
+      bottom: 2.5rem;
+      right: 24px;
+      width:25rem;
+      background-color: rgba(0, 0, 0, 0.7);
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .messages {
+      max-height: 200px;
+      padding: 20px;
+      overflow-y: auto;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+}
+
+  </style>
+</head>
+
+<body>
+  <div class="video-container">
+    <video autoplay muted loop id="bg-video">
+      <source src="background.mp4" type="video/mp4">
+      Your browser does not support HTML5 video.
+    </video>
+    <div class="content">
+      <h1>Don't think, just speak...!</h1>
+      <p>yaha sirf bolne se hota hai..</p>
+    </div>
+  </div>
+
+  <div class="chat-container">
+    <div class="messages" id="messageDisplayArea"></div>
+    <div class="input-area">
+      <textarea id="messageInput" placeholder="dare to speak..."></textarea>
+      <button id="sendButton">Send</button>
+    </div>
+  </div>
+
+  <div class="box">
+    <h2>complete the Q.1] A :</h2>
+    <p>(tumhe bhi nahi samja na..just dare to speak )</p>
+  </div>
+  
+  <div class="image-upload-box">
+    <div class="image">
+      <img src="image.png" alt="">
+    </div>
+  </div>
+
+  <script>
+    let skip = 0;
+    const limit = 20;
+    let isLoading = false; // Flag to avoid multiple fetches
+    let hasMoreMessages = true; // Flag to check if there are more messages to load
+
+    // Function to load messages with pagination
+    function loadMessages() {
+      if (isLoading || !hasMoreMessages) return; // Prevent concurrent fetches and stop if no more messages
+
+      isLoading = true; // Set loading flag
+
+      fetch(`http://localhost:5000/messages?skip=${skip}`)
+        .then(response => response.json())
+        .then(messages => {
+          const messageDisplayArea = document.getElementById('messageDisplayArea');
+
+          if (messages.length < limit) {
+            hasMoreMessages = false; // No more messages to load
+          }
+
+          // Reverse the order to show older messages at the bottom
+          messages.reverse().forEach(message => {
+            const newMessage = document.createElement('div');
+            newMessage.classList.add('message');
+            newMessage.textContent = message.content;
+            messageDisplayArea.appendChild(newMessage);
+          });
+
+          // Update the skip value for the next fetch
+          skip += messages.length;
+
+          // Scroll to the bottom to show the latest messages
+          messageDisplayArea.scrollTop = messageDisplayArea.scrollHeight;
+
+          // Reset loading flag
+          isLoading = false;
+        })
+        .catch(() => {
+          isLoading = false; // Reset loading flag on error
+        });
+    }
+
+    // Load messages on page load
+    window.onload = function () {
+      loadMessages();
+    };
+
+    // Load more messages when scrolled to the top
+    const messageDisplayArea = document.getElementById('messageDisplayArea');
+    messageDisplayArea.addEventListener('scroll', function () {
+      if (messageDisplayArea.scrollTop === 0) {
+        loadMessages();
+      }
+    });
+
+    // Function to send a message
+    function sendMessage() {
+      const messageInput = document.getElementById('messageInput');
+      const message = messageInput.value.trim();
+
+      if (message) {
+        fetch('http://localhost:5000/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ content: message })
+        })
+          .then(() => {
+            messageInput.value = ''; // Clear input field
+            // Reload messages to include the newly sent one
+            skip = 0; // Reset skip value to reload all messages
+            hasMoreMessages = true; // Ensure more messages can be loaded
+            document.getElementById('messageDisplayArea').innerHTML = ''; // Clear the message display area
+            loadMessages();
+          });
+      }
+    }
+
+    // Add event listener for the Send button
+    document.getElementById('sendButton').addEventListener('click', sendMessage);
+
+    // Add event listener for Enter key press
+    document.getElementById('messageInput').addEventListener('keypress', function (e) {
+      if (e.key === 'Enter' && !e.shiftKey) { // Check for Enter key press without Shift key
+        e.preventDefault(); // Prevent default newline behavior
+        sendMessage();
+      }
+    });
+  </script>
+
+
+
+
+</body>
+
+</html>
